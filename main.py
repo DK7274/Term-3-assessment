@@ -24,10 +24,12 @@ class pcharacter(object):
         self.vel = 5
         self.isJump = False
         self.jumpCount = 10
+        self.jumpMax =10
         self.still = True
     def draw(self,win):
         win.blit(playerImage,(self.x,self.y))
 
+###functions for different screens###
 
 def redrawGameWindow():
     clock.tick(30)
@@ -79,17 +81,27 @@ gameFont = pygame.font.SysFont("comicsans",20,True)
 run = True
 player = pcharacter(500,400,64,64)
 
-###functions for different screens###
 def gameScreen():
     global keys
+
     if keys[pygame.K_LEFT] and player.x > player.vel:
         player.x -= player.vel
     if keys[pygame.K_RIGHT] and player.x < 1000 - player.width - player.vel:
         player.x += player.vel
-    #if keys[pygame.K_UP] and player.y > player.vel:
-        #player.y -= player.vel
-    #if keys[pygame.K_DOWN] and player.y < 500 - player.height - player.vel:
-        #player.y += player.vel
+    if not(player.isJump):
+        if keys[pygame.K_SPACE]:
+            player.isJump = True
+    else:
+        if player.jumpCount >= -player.jumpMax:
+            player.y -= (player.jumpCount*abs(player.jumpCount))*0.5
+            print("jump grav", player.y)
+            player.jumpCount -= 1
+            print("player position",(player.jumpCount-player.y))
+        else:
+            player.jumpCount = player.jumpMax
+            player.isJump = False
+
+
     redrawGameWindow()
 
 
