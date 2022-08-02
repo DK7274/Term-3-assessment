@@ -9,6 +9,8 @@ bg = pygame.image.load("Images/space.png")
 bg = pygame.transform.scale(bg,(1000,500))
 playerImage = pygame.image.load("Images/Alien.png")
 playerImage = pygame.transform.scale(playerImage,(64,64))
+platform = pygame.image.load("Images/platform.png")
+
 clock = pygame.time.Clock()
 score = 0
 mouseX,mouseY = (0,0)
