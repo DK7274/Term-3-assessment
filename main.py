@@ -21,10 +21,10 @@ class pcharacter(object):
         self.y = y
         self.width = width
         self.height = height
-        self.vel = 5
+        self.vel = 10
         self.isJump = False
-        self.jumpCount = 10
-        self.jumpMax =10
+        self.jumpCount = 12
+        self.jumpMax =12
         self.still = True
     def draw(self,win):
         win.blit(playerImage,(self.x,self.y))
@@ -83,14 +83,16 @@ player = pcharacter(500,400,64,64)
 
 def gameScreen():
     global keys
+    global score
 
     if keys[pygame.K_LEFT] and player.x > player.vel:
         player.x -= player.vel
     if keys[pygame.K_RIGHT] and player.x < 1000 - player.width - player.vel:
         player.x += player.vel
     if not(player.isJump):
-        if keys[pygame.K_SPACE]:
+        if (player.y + player.height) >= 400:
             player.isJump = True
+            print("cum")
     else:
         if player.jumpCount >= -player.jumpMax:
             player.y -= (player.jumpCount*abs(player.jumpCount))*0.5
@@ -100,6 +102,7 @@ def gameScreen():
         else:
             player.jumpCount = player.jumpMax
             player.isJump = False
+            score += 1
 
 
     redrawGameWindow()
