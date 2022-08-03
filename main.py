@@ -10,11 +10,24 @@ bg = pygame.transform.scale(bg,(1000,500))
 playerImage = pygame.image.load("Images/Alien.png")
 playerImage = pygame.transform.scale(playerImage,(64,64))
 platform = pygame.image.load("Images/platform.png")
+platform = pygame.transform.scale(platform,(100,50))
 
 clock = pygame.time.Clock()
 score = 0
 mouseX,mouseY = (0,0)
 gameOn = False
+platformRandom = False
+platformXLimitA = 0
+platformXLimitB = 1000-300
+platformYLimitA = 0
+platformYLimitB = 500-100
+platform1Hit = True
+platform2Hit = True
+platform3Hit = True
+platform4Hit = True
+platform5Hit = True
+platform6Hit = True
+
 
 class pcharacter(object):
 
@@ -31,6 +44,68 @@ class pcharacter(object):
     def draw(self,win):
         win.blit(playerImage,(self.x,self.y))
 
+class platform_1(object):
+    def __init__(self,x,y,width,height):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.isContact = False
+    def draw(self,win):
+        win.blit(platform,(self.x,self.y))
+
+class platform_2(object):
+    def __init__(self,x,y,width,height):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.isContact = False
+    def draw(self, win):
+        win.blit(platform, (self.x, self.y))
+
+
+class platform_3(object):
+    def __init__(self,x,y,width,height):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.isContact = False
+    def draw(self,win):
+        win.blit(platform,(self.x,self.y))
+
+class platform_4(object):
+    def __init__(self,x,y,width,height):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.isContact = False
+    def draw(self,win):
+        win.blit(platform,(self.x,self.y))
+
+class platform_5(object):
+    def __init__(self,x,y,width,height):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.isContact = False
+    def draw(self,win):
+        win.blit(platform,(self.x,self.y))
+
+class platform_6(object):
+    def __init__(self,x,y,width,height):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.isContact = False
+    def draw(self,win):
+        win.blit(platform,(self.x,self.y))
+
+
 ###functions for different screens###
 
 def redrawGameWindow():
@@ -39,6 +114,12 @@ def redrawGameWindow():
     text = gameFont.render("Score: " + str(score),1,(0,0,0))
     win.blit(text,(800,25))
     player.draw(win)
+    platform1.draw(win)
+    platform2.draw(win)
+    platform3.draw(win)
+    platform4.draw(win)
+    platform5.draw(win)
+    platform6.draw(win)
     pygame.display.update()
 
 def menuWindow():
@@ -82,11 +163,70 @@ def menuWindow():
 gameFont = pygame.font.SysFont("comicsans",20,True)
 run = True
 player = pcharacter(500,400,64,64)
+platform1 = platform_1(100,100,100,50)
+platform2 = platform_2(100,200,100,50)
+platform3 = platform_3(100,300,100,50)
+platform4 = platform_4(200,100,100,50)
+platform5 = platform_5(200,200,100,50)
+platform6 = platform_6(200,300,100,50)
+
+def platformRandomizer():
+    global xRandom
+    global yRandom
+    global platform1
+    global platform2
+    global platform3
+    global platform4
+    global platform5
+    global platform6
+    global platformRandom
+    global platform1Hit
+    global platform2Hit
+    global platform3Hit
+    global platform4Hit
+    global platform5Hit
+    global platform6Hit
+
+    if platform1Hit == True:
+        xRandom = random.randint(platformXLimitA, platformXLimitB)
+        yRandom = random.randint(platformYLimitA, platformYLimitB)
+        platform1 = platform_1(xRandom,yRandom,100,50)
+        platform1Hit = False
+    elif platform2Hit == True:
+        xRandom = random.randint(platformXLimitA, platformXLimitB)
+        yRandom = random.randint(platformYLimitA, platformYLimitB)
+        platform2 = platform_2(xRandom,yRandom,100,50)
+        platform2Hit = False
+    elif platform3Hit == True:
+        xRandom = random.randint(platformXLimitA, platformXLimitB)
+        yRandom = random.randint(platformYLimitA, platformYLimitB)
+        platform3 = platform_3(xRandom,yRandom,100,50)
+        platform3Hit = False
+    elif platform4Hit == True:
+        xRandom = random.randint(platformXLimitA, platformXLimitB)
+        yRandom = random.randint(platformYLimitA, platformYLimitB)
+        platform4 = platform_4(xRandom,yRandom,100,50)
+        platform4Hit = False
+    elif platform5Hit == True:
+        xRandom = random.randint(platformXLimitA, platformXLimitB)
+        yRandom = random.randint(platformYLimitA, platformYLimitB)
+        platform5 = platform_5(xRandom,yRandom,100,50)
+        platform5Hit = False
+    elif platform6Hit == True:
+        xRandom = random.randint(platformXLimitA, platformXLimitB)
+        yRandom = random.randint(platformYLimitA, platformYLimitB)
+        platform6 = platform_6(xRandom,yRandom,100,50)
+        platform6Hit = False
+    else:
+        platformRandom = True
+
 
 def gameScreen():
     global keys
     global score
 
+    if platformRandom == False:
+        platformRandomizer()
     if keys[pygame.K_LEFT] and player.x > player.vel:
         player.x -= player.vel
     if keys[pygame.K_RIGHT] and player.x < 1000 - player.width - player.vel:
