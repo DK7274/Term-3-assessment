@@ -189,46 +189,11 @@ def platformReset():
     platform6Hit = True
 
 def gameOverWindow():
-    global button_rect
-    global mouseX
-    global mouseY
-    global gameOn
-    global gameOver
-    global gameStart
-    global score
     win.blit(bg, (0, 0))
     button_text_color = (0, 0, 0)
     title_text_color = (25, 40, 156)
-    button_color = (25, 40, 156)
-    button_over_color = (6, 17, 99)
-    button_width = 200
-    button_height = 100
-    button_rect = [(win.get_width() - button_width) / 2,
-                   win.get_height() / 2 - button_height / 2,
-                   button_width, button_height]
-    button_font = pygame.font.SysFont("comicsans", 20)
-    button_text = button_font.render("PLAY", True, button_text_color)
     title_font = pygame.font.SysFont("impact", 50)
     title_text = title_font.render("GAME OVER", True, title_text_color)
-    for event in pygame.event.get():
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            mouseX, mouseY = event.pos
-            if (button_rect[0] <= mouseX <= button_rect[0] + button_rect[2] and
-                    button_rect[1] <= mouseY <= button_rect[1] + button_rect[3]):
-                gameOn = True
-                gameOver = False
-                gameStart = True
-                player.y = 501
-                score = 0
-        if event.type == pygame.MOUSEMOTION:
-            mouseX, mouseY = event.pos
-    if (button_rect[0] <= mouseX <= button_rect[0] + button_rect[2] and
-            button_rect[1] <= mouseY <= button_rect[1] + button_rect[3]):
-        pygame.draw.rect(win, button_over_color, button_rect)
-    else:
-        pygame.draw.rect(win, button_color, button_rect)
-    win.blit(button_text, (button_rect[0] + (button_width - button_text.get_width()) / 2,
-                           button_rect[1] + (button_height / 2 - button_text.get_height() / 2)))
     win.blit(title_text, (356.625, 100))
 
     pygame.display.update()
