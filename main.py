@@ -28,6 +28,7 @@ platform4Hit = True
 platform5Hit = True
 platform6Hit = True
 playerPos2 = 0
+hitPlatform = False
 
 class pcharacter(object):
 
@@ -162,7 +163,7 @@ def menuWindow():
 
 gameFont = pygame.font.SysFont("comicsans",20,True)
 run = True
-player = pcharacter(500,400,64,64)
+player = pcharacter(500,500,64,64)
 platform1 = platform_1(100,100,100,50)
 platform2 = platform_2(100,200,100,50)
 platform3 = platform_3(100,300,100,50)
@@ -220,18 +221,63 @@ def platformRandomizer():
     else:
         platformRandom = True
 
-def hitCheck():
+def downCheck():
     global playerPos2
     global goingDown
     playerPos1 = player.y
     if playerPos1 >= playerPos2:
         goingDown = True
         print("going down")
+        hitCheck()
     playerPos2 = player.y
+
+def hitCheck():
+    global hitPlatform
+    global platformRandom
+    global platform1Hit
+    global platform2Hit
+    global platform3Hit
+    global platform4Hit
+    global platform5Hit
+    global platform6Hit
+    if player.y + player.height >= platform1.y and player.y + player.height <= platform1.y + platform1.height and player.x + player.width <= platform1.x + platform1.width and player.x >= platform1.x:
+        hitPlatform = True
+        platformRandom = False
+        platform1Hit = True
+        print("hit platform1")
+    elif player.y + player.height >= platform2.y and player.y + player.height <= platform2.y + platform2.height and player.x + player.width <= platform2.x + platform2.width and player.x >= platform2.x:
+        hitPlatform = True
+        platformRandom = False
+        platform2Hit = True
+        print("hit platform2")
+    elif player.y + player.height >= platform3.y and player.y + player.height <= platform3.y + platform3.height and player.x + player.width <= platform3.x + platform3.width and player.x >= platform3.x:
+        hitPlatform = True
+        platformRandom = False
+        platform3Hit = True
+        print("hit platform3")
+    elif player.y + player.height >= platform4.y and player.y + player.height <= platform4.y + platform4.height and player.x + player.width <= platform4.x + platform4.width and player.x >= platform4.x:
+        hitPlatform = True
+        platformRandom = False
+        platform4Hit = True
+        print("hit platform4")
+    elif player.y + player.height >= platform5.y and player.y + player.height <= platform5.y + platform5.height and player.x + player.width <= platform5.x + platform5.width and player.x >= platform5.x:
+        hitPlatform = True
+        platformRandom = False
+        platform5Hit = True
+        print("hit platform5")
+    elif player.y + player.height >= platform6.y and player.y + player.height <= platform6.y + platform6.height and player.x + player.width <= platform6.x + platform6.width and player.x >= platform6.x:
+        hitPlatform = True
+        platformRandom = False
+        platform6Hit = True
+        print("hit platform6")
+
+
+
 
 def gameScreen():
     global keys
     global score
+    global hitPlatform
 
     if platformRandom == False:
         platformRandomizer()
@@ -240,7 +286,7 @@ def gameScreen():
     if keys[pygame.K_RIGHT] and player.x < 1000 - player.width - player.vel:
         player.x += player.vel
     if not(player.isJump):
-        if (player.y + player.height) >= 400:
+        if (player.y + player.height) >= 500:
             player.isJump = True
             print("jump!")
     else:
@@ -249,7 +295,11 @@ def gameScreen():
             print("jump grav", player.y)
             player.jumpCount -= 1
             print("player position",(player.jumpCount-player.y))
-            hitCheck()
+            downCheck()
+            if hitPlatform == True:
+                player.jumpCount = player.jumpMax
+                hitPlatform = False
+                score += 1
         else:
             player.jumpCount = player.jumpMax
             player.isJump = False
