@@ -27,7 +27,7 @@ platform3Hit = True
 platform4Hit = True
 platform5Hit = True
 platform6Hit = True
-
+playerPos2 = 0
 
 class pcharacter(object):
 
@@ -40,7 +40,7 @@ class pcharacter(object):
         self.isJump = False
         self.jumpCount = 12
         self.jumpMax =12
-        self.still = True
+        self.goingDown = False
     def draw(self,win):
         win.blit(playerImage,(self.x,self.y))
 
@@ -220,6 +220,14 @@ def platformRandomizer():
     else:
         platformRandom = True
 
+def hitCheck():
+    global playerPos2
+    global goingDown
+    playerPos1 = player.y
+    if playerPos1 >= playerPos2:
+        goingDown = True
+        print("going down")
+    playerPos2 = player.y
 
 def gameScreen():
     global keys
@@ -234,13 +242,14 @@ def gameScreen():
     if not(player.isJump):
         if (player.y + player.height) >= 400:
             player.isJump = True
-            print("cum")
+            print("jump!")
     else:
         if player.jumpCount >= -player.jumpMax:
             player.y -= (player.jumpCount*abs(player.jumpCount))*0.5
             print("jump grav", player.y)
             player.jumpCount -= 1
             print("player position",(player.jumpCount-player.y))
+            hitCheck()
         else:
             player.jumpCount = player.jumpMax
             player.isJump = False
@@ -260,3 +269,4 @@ while run:
         gameScreen()
     else:
         menuWindow()
+pygame.quit()
