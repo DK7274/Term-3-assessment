@@ -24,10 +24,16 @@ gameStart = True
 gameOver = False
 
 #limits for randomizer#
-platformXLimitA = 0
-platformXLimitB = 1000-300
-platformYLimitA = 0
-platformYLimitB = 500-100
+platformRow1Min = 0
+platformRow1Max = 250 - 100
+platformRow2Min = 251 - 100
+platformRow2Max = 500 - 100
+platformColumn1Min = 0
+platformColumn1Max = 330 - 300
+platformColumn2Min = 331
+platformColumn2Max = 660 - 300
+platformColumn3Min = 661
+platformColumn3Max = 990 - 300
 
 #variables for platform detection and movement of character#
 platform1Hit = True
@@ -39,7 +45,7 @@ platform6Hit = True
 playerPos2 = 0
 hitPlatform = False
 
-#class for character#
+#class for character and variables for all of the player qualities#
 class pcharacter(object):
 
     def __init__(self,x,y,width,height):
@@ -47,7 +53,7 @@ class pcharacter(object):
         self.y = y
         self.width = width
         self.height = height
-        self.vel = 10
+        self.vel = 15
         self.isJump = False
         self.jumpCount = 12
         self.jumpMax =12
@@ -62,7 +68,7 @@ class platform_1(object):
         self.y = y
         self.width = width
         self.height = height
-        self.isContact = False
+        self.isContact = False #variable for contact with player#
     def draw(self,win):
         win.blit(platform,(self.x,self.y))
 
@@ -121,11 +127,12 @@ class platform_6(object):
 ###functions for different screens###
 
 def redrawGameWindow():
-    clock.tick(30)
+    clock.tick(15)
     win.blit(bg,(0,0))
-    text = gameFont.render("Score: " + str(score),1,(0,0,0))
+    text = gameFont.render("Score: " + str(score),1,(0,0,0)) #shows score#
     win.blit(text,(800,25))
     player.draw(win)
+    #drawing platforms#
     platform1.draw(win)
     platform2.draw(win)
     platform3.draw(win)
@@ -139,6 +146,7 @@ def menuWindow():
     global mouseX
     global mouseY
     global gameOn
+    #blitting the menu window#
     win.blit(bg,(0,0))
     button_text_color = (0,0,0)
     title_text_color = (25,40,156)
@@ -158,9 +166,9 @@ def menuWindow():
             mouseX,mouseY = event.pos
             if(button_rect[0] <= mouseX <= button_rect[0] + button_rect[2] and
             button_rect[1] <= mouseY <= button_rect[1] + button_rect[3]):
-                gameOn = True
+                gameOn = True #if click on the button then you start the game#
         if event.type == pygame.MOUSEMOTION:
-            mouseX,mouseY = event.pos
+            mouseX,mouseY = event.pos #code for changing button colour on mouse rollover#
     if (button_rect[0] <= mouseX <= button_rect[0] + button_rect[2] and
             button_rect[1] <= mouseY <= button_rect[1] + button_rect[3]):
         pygame.draw.rect(win, button_over_color, button_rect)
@@ -172,22 +180,7 @@ def menuWindow():
 
     pygame.display.update()
 
-def platformReset():
-    global platformRandom
-    global platform1Hit
-    global platform2Hit
-    global platform3Hit
-    global platform4Hit
-    global platform5Hit
-    global platform6Hit
-    platformRandom = True
-    platform1Hit = True
-    platform2Hit = True
-    platform3Hit = True
-    platform4Hit = True
-    platform5Hit = True
-    platform6Hit = True
-
+#window that shows when gameover condition is met#
 def gameOverWindow():
     win.blit(bg, (0, 0))
     button_text_color = (0, 0, 0)
@@ -208,6 +201,7 @@ platform4 = platform_4(200,100,100,50)
 platform5 = platform_5(200,200,100,50)
 platform6 = platform_6(200,300,100,50)
 
+#function that randomizes the platform, made so that each platform is restricted to their own sector so there is less overlap of platforms#
 def platformRandomizer():
     global xRandom
     global yRandom
@@ -224,49 +218,49 @@ def platformRandomizer():
     global platform4Hit
     global platform5Hit
     global platform6Hit
-
+    #checks each of the platforms if they are hit, making it only reset the position of 1 platform not all of them#
     if platform1Hit == True:
-        xRandom = random.randint(platformXLimitA, platformXLimitB)
-        yRandom = random.randint(platformYLimitA, platformYLimitB)
+        xRandom = random.randint(platformColumn1Min, platformColumn1Max) #this line and line below restrict it to its sector, which is one of three columns and one of two rows#
+        yRandom = random.randint(platformRow1Min, platformRow1Max)
         platform1 = platform_1(xRandom,yRandom,100,50)
         platform1Hit = False
     elif platform2Hit == True:
-        xRandom = random.randint(platformXLimitA, platformXLimitB)
-        yRandom = random.randint(platformYLimitA, platformYLimitB)
+        xRandom = random.randint(platformColumn2Min, platformColumn2Max)
+        yRandom = random.randint(platformRow1Min, platformRow1Max)
         platform2 = platform_2(xRandom,yRandom,100,50)
         platform2Hit = False
     elif platform3Hit == True:
-        xRandom = random.randint(platformXLimitA, platformXLimitB)
-        yRandom = random.randint(platformYLimitA, platformYLimitB)
+        xRandom = random.randint(platformColumn3Min, platformColumn3Max)
+        yRandom = random.randint(platformRow1Min, platformRow1Max)
         platform3 = platform_3(xRandom,yRandom,100,50)
         platform3Hit = False
     elif platform4Hit == True:
-        xRandom = random.randint(platformXLimitA, platformXLimitB)
-        yRandom = random.randint(platformYLimitA, platformYLimitB)
+        xRandom = random.randint(platformColumn1Min, platformColumn1Max)
+        yRandom = random.randint(platformRow2Min, platformRow2Max)
         platform4 = platform_4(xRandom,yRandom,100,50)
         platform4Hit = False
     elif platform5Hit == True:
-        xRandom = random.randint(platformXLimitA, platformXLimitB)
-        yRandom = random.randint(platformYLimitA, platformYLimitB)
+        xRandom = random.randint(platformColumn2Min, platformColumn2Max)
+        yRandom = random.randint(platformRow2Min, platformRow2Max)
         platform5 = platform_5(xRandom,yRandom,100,50)
         platform5Hit = False
     elif platform6Hit == True:
-        xRandom = random.randint(platformXLimitA, platformXLimitB)
-        yRandom = random.randint(platformYLimitA, platformYLimitB)
+        xRandom = random.randint(platformColumn3Min, platformColumn3Max)
+        yRandom = random.randint(platformRow2Min, platformRow2Max)
         platform6 = platform_6(xRandom,yRandom,100,50)
         platform6Hit = False
     else:
-        platformRandom = True
+        platformRandom = True #if no platforms are hit, it stops running this function#
 #checks if character is moving downwards on screen#
 def downCheck():
     global playerPos2
     global goingDown
-    playerPos1 = player.y
-    if playerPos1 >= playerPos2:
+    playerPos1 = player.y #checks this y value against previousy value#
+    if playerPos1 >= playerPos2: #if current y value beneath old y value, you are going down#
         goingDown = True
         print("going down")
         hitCheck()
-    playerPos2 = player.y
+    playerPos2 = player.y #resets the "old" y value for the next running of this function#
 ##
 
 ##checks if the charcter hits the platform while going down##
@@ -308,7 +302,7 @@ def hitCheck():
 ######
 
 
-
+#function for the entire 'gameplay' part of the 'game'
 def gameScreen():
     global keys
     global score
